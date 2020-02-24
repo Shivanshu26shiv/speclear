@@ -17,7 +17,6 @@ def find_all(name, path):
 def delete_history_non_ie(browser_type, strings_to_be_deleted):
     # if strings_to_be_deleted in [[], [''], [""]]:
     # return 0
-
     if browser_type == 'chrome':
         table_name = 'urls'
         final_row = "str(row[1])+str(row[2])"
@@ -43,7 +42,7 @@ def delete_history_non_ie(browser_type, strings_to_be_deleted):
         logger.info('Info:: Browser not found: '+browser_type)
         return
 
-    for path in paths:
+    for cnt, path in enumerate(paths, 1):
         result = True
         while result:
             result = False
@@ -70,11 +69,11 @@ def delete_history_non_ie(browser_type, strings_to_be_deleted):
                                 ids.append(temp)
                     # logger.info(ids)
                     if len(ids) > 0:
-                        # cursor.executemany('DELETE FROM '+table_name+' WHERE id=?', ids)
-                        logger.info('Info:: Number of rows deleted is: '+str(len(ids))+' : '+browser_type)
+                        cursor.executemany('DELETE FROM '+table_name+' WHERE id=?', ids)
+                    logger.info('Info:: for '+browser_type+' (profile '+str(cnt)+'), number of rows deleted is: '+str(len(ids)))
                     connection.commit()
                 except sqlite3.OperationalError:
-                    logger.warning("Warning:: Database locked, please close: "+browser_type)
+                    logger.warning('Warning:: for '+browser_type+' (profile '+str(cnt)+') database seems locked, please close the browser')
 
             finally:
                 connection.close()
@@ -113,17 +112,19 @@ def delete_history(*args):
     # strings_to_be_deleted = ['forward', 'KYwtivxpUx']
     _ = ' '
     for __ in strings_to_be_deleted:
-        _ += __
+        _ += __+' '
 
-    logger.info('Info:: String(s) to be deleted:'+_)
+    logger.info('Info:: string(s) to be deleted:'+_)
     logger.info('')
 
     for _ in ['chrome', 'firefox', 'opera', 'safari']:    
         delete_history_non_ie(_, strings_to_be_deleted)  
-    # ie_clear()
+    ie_clear()
     # logger.info('')
 
 
 if __name__ == "__main__":
-    delete_history('abd')
-    # delete_history()
+    assert hasattr(sys, 'getwindowsversion'), "Operating system is not Windows"
+    assert sys.version_info >= (3, 0), 'Python version should be at least 3.0'
+    delete_history()
+
