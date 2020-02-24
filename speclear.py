@@ -1,3 +1,5 @@
+__all__ = ['delete_history']
+
 import os
 import sys
 import logging
