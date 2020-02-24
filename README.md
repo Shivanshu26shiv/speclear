@@ -1,7 +1,8 @@
 <h2>speclear - delete specific history in major windows browsers</h2>
 
 With speclear, you can delete sepcific history items in major installed browsers such as chrome, firefox, opera and safari in Windows.
-For Internet explorer (IE), specific segregation is not possible hence speclear will delete <b>all history items</b>.
+For Internet explorer (IE), specific segregation is not possible hence speclear will delete <b>all IE history items</b>.
+To prevent this, you can comment function ie_clear(). 
 
 See below for more details.
 <h3>Getting it:</h3>
